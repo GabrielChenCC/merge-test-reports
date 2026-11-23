@@ -46,8 +46,23 @@ read_segment 'Code name'
 code=$REPLY
 read_segment 'Milestone'
 milestone=$REPLY
-read_segment 'Image version'
-version=$REPLY
+channel_file=/var/lib/ubuntu_dist_channel
+if [[ -r "$channel_file" ]] &&
+    descriptor=$(awk '
+        /^[[:space:]]*(#|$)/ { next }
+        { gsub(/^[[:space:]]+|[[:space:]]+$/, ""); value = $0; count++ }
+        END { if (count != 1) exit 1; print value }
+    ' "$channel_file") &&
+    [[ $descriptor =~ ^[[:alnum:]._-]+-[[:alnum:]._]+-[[:alnum:]._]+$ ]]; then
+    last=${descriptor##*-}
+    rest=${descriptor%-*}
+    version="${rest##*-}-$last"
+    printf 'Image version: %s\n' "$version"
+else
+    printf 'Warning: cannot read a valid image version from %s; enter it manually.\n' "$channel_file" >&2
+    read_segment 'Image version'
+    version=$REPLY
+fi
 report="${model}_${code}_${milestone}_${version}_test-report.html"
 
 outputs=("${archives[@]}" "$root/$report")
