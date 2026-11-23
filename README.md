@@ -20,9 +20,15 @@ testreport/
 │   ├── Stress/
 │   │   └── submission.tar.xz
 │   └── Re-run/
+│   │   └── submission.tar.xz
+│   └── checkbox-ng/
 │       └── submission.tar.xz
 └── Device-B/
-    └── checkbox-ng/
+|   └── checkbox-ng/
+|   |   └── submission.tar.xz
+│   ├── Automatic/
+│   │   └── submission.tar.xz
+│   ├── Stress/
         └── submission.tar.xz
 ```
 
